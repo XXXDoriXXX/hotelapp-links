@@ -8,24 +8,31 @@
     const params = new URLSearchParams(window.location.search);
     const hotelId = params.get("id");
     if (hotelId) {
+      // Пробуємо відкрити myapp://
       window.location.href = `myapp://hotel?id=${hotelId}`;
     }
 
-    // Показати fallback через 2 сек
+    // Через 2 сек показуємо fallback
     setTimeout(() => {
       document.getElementById("fallback").style.display = "block";
     }, 2000);
   </script>
 </head>
 <body>
-  <p>Trying to open HotelApp...</p>
-  <div id="fallback" style="display:none;">
-    <p>If nothing happens, <a id="openAppLink" href="#">click here</a> or <a href="/apk/hotelapp.apk">download the app</a>.</p>
+  <h2>Opening HotelApp...</h2>
+
+  <div id="fallback" style="display: none;">
+    <p>If nothing happens, it means HotelApp is not installed.</p>
+    <p>
+      👉 <a href="/apk/hotelapp.apk">Download HotelApp</a><br>
+      🏨 After installing, click this link again:
+      <a id="deepLink">myapp://hotel?id=</a>
+    </p>
     <script>
+      // Показати лінк вручну
       const hotelId = new URLSearchParams(window.location.search).get("id");
-      if (hotelId) {
-        document.getElementById("openAppLink").href = `myapp://hotel?id=${hotelId}`;
-      }
+      document.getElementById("deepLink").href = `myapp://hotel?id=${hotelId}`;
+      document.getElementById("deepLink").innerText = `myapp://hotel?id=${hotelId}`;
     </script>
   </div>
 </body>
