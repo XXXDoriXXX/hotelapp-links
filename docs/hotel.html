@@ -5,15 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Open in HotelApp</title>
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    #fallback {
-      display: none;
-      margin-top: 30px;
-    }
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    #fallback { display: none; margin-top: 30px; }
     .btn {
       display: inline-block;
       margin-top: 12px;
@@ -25,37 +18,41 @@
       font-weight: bold;
     }
   </style>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const hotelId = params.get("id");
-
-    // ⏳ Затримка перед редиректом, щоб DOM встиг відмалюватись
-    if (hotelId) {
-      setTimeout(() => {
-        window.location.href = `myapp://hotel?id=${hotelId}`;
-      }, 200);
-    }
-
-    // ⏳ Через 2 сек показуємо fallback і кнопку
-    setTimeout(() => {
-      document.getElementById("fallback").style.display = "block";
-      const deepLink = document.getElementById("deepLink");
-      deepLink.href = `myapp://hotel?id=${hotelId}`;
-      deepLink.textContent = `myapp://hotel?id=${hotelId}`;
-    }, 2000);
-  </script>
 </head>
 <body>
   <h2>Opening HotelApp...</h2>
 
   <div id="fallback">
     <p>If nothing happens, HotelApp might not be installed.</p>
-    <p>👇 Click to download the app:</p>
     <a class="btn" href="/hotelapp.apk">⬇️ Download HotelApp</a>
     <p style="margin-top: 16px;">
       After installing, click this link again:<br/>
       <a id="deepLink" href="#">myapp://hotel?id=</a>
     </p>
   </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const hotelId = params.get("id");
+    const fallback = document.getElementById("fallback");
+    const deepLink = document.getElementById("deepLink");
+
+    if (hotelId) {
+      deepLink.href = `myapp://hotel?id=${hotelId}`;
+      deepLink.textContent = `myapp://hotel?id=${hotelId}`;
+
+      setTimeout(() => {
+        window.location.href = `myapp://hotel?id=${hotelId}`;
+      }, 200);
+
+      // Покажемо fallback через 2s незалежно від того, що відбулося
+      setTimeout(() => {
+        fallback.style.display = "block";
+      }, 2000);
+    } else {
+      fallback.style.display = "block";
+      deepLink.textContent = "myapp://hotel?id=UNKNOWN";
+    }
+  </script>
 </body>
 </html>
