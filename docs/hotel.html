@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Open in HotelApp</title>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const hotelId = params.get("id");
+    if (hotelId) {
+      window.location.href = `myapp://hotel?id=${hotelId}`;
+    }
+
+    // Показати fallback через 2 сек
+    setTimeout(() => {
+      document.getElementById("fallback").style.display = "block";
+    }, 2000);
+  </script>
+</head>
+<body>
+  <p>Trying to open HotelApp...</p>
+  <div id="fallback" style="display:none;">
+    <p>If nothing happens, <a id="openAppLink" href="#">click here</a> or <a href="/apk/hotelapp.apk">download the app</a>.</p>
+    <script>
+      const hotelId = new URLSearchParams(window.location.search).get("id");
+      if (hotelId) {
+        document.getElementById("openAppLink").href = `myapp://hotel?id=${hotelId}`;
+      }
+    </script>
+  </div>
+</body>
+</html>
