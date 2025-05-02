@@ -4,36 +4,58 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Open in HotelApp</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    #fallback {
+      display: none;
+      margin-top: 30px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 18px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+  </style>
   <script>
     const params = new URLSearchParams(window.location.search);
     const hotelId = params.get("id");
+
+    // ⏳ Затримка перед редиректом, щоб DOM встиг відмалюватись
     if (hotelId) {
-      // Пробуємо відкрити myapp://
-      window.location.href = `myapp://hotel?id=${hotelId}`;
+      setTimeout(() => {
+        window.location.href = `myapp://hotel?id=${hotelId}`;
+      }, 200);
     }
 
-    // Через 2 сек показуємо fallback
+    // ⏳ Через 2 сек показуємо fallback і кнопку
     setTimeout(() => {
       document.getElementById("fallback").style.display = "block";
+      const deepLink = document.getElementById("deepLink");
+      deepLink.href = `myapp://hotel?id=${hotelId}`;
+      deepLink.textContent = `myapp://hotel?id=${hotelId}`;
     }, 2000);
   </script>
 </head>
 <body>
   <h2>Opening HotelApp...</h2>
 
-  <div id="fallback" style="display: none;">
-    <p>If nothing happens, it means HotelApp is not installed.</p>
-    <p>
-      👉 <a href="/apk/hotelapp.apk">Download HotelApp</a><br>
-      🏨 After installing, click this link again:
-      <a id="deepLink">myapp://hotel?id=</a>
+  <div id="fallback">
+    <p>If nothing happens, HotelApp might not be installed.</p>
+    <p>👇 Click to download the app:</p>
+    <a class="btn" href="/hotelapp.apk">⬇️ Download HotelApp</a>
+    <p style="margin-top: 16px;">
+      After installing, click this link again:<br/>
+      <a id="deepLink" href="#">myapp://hotel?id=</a>
     </p>
-    <script>
-      // Показати лінк вручну
-      const hotelId = new URLSearchParams(window.location.search).get("id");
-      document.getElementById("deepLink").href = `myapp://hotel?id=${hotelId}`;
-      document.getElementById("deepLink").innerText = `myapp://hotel?id=${hotelId}`;
-    </script>
   </div>
 </body>
 </html>
